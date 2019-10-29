@@ -8,7 +8,7 @@ class Updater(object):
     def __init__(self, plot, activated=False, rate=5, **kwargs):
         self.out = widgets.Output()
         self.plot = plot()
-        self.activated = activated
+        self.activated = not activated
         self.rate = rate
         self.collection = self._construct(**kwargs)
         
