@@ -5,15 +5,19 @@ import asyncio
 
 class Updater(object):
 
-    def __init__(self, plot, activated=False, rate=5, **kwargs):
-        self.out = widgets.Output()
+    def __init__(self, plot, activated=False, rate=5, height='500px', **kwargs):
+        self.out = widgets.Output(layout=widgets.Layout(border='1px solid grey',
+                                                        height=height,
+                                                        #justify_content='space_around',
+                                                        align_items='center',
+                                                        **kwargs))
         self.plot = plot()
         self.activated = not activated
         self.rate = rate
         self.collection = self._construct(**kwargs)
         
     def _construct(self, **kwargs):
-        items_layout = widgets.Layout(width='70%')     # override the default width of the button to 'auto' to let the button grow
+        items_layout = widgets.Layout(width='70%')
 
         box_layout = widgets.Layout(display='flex',
                                     border='1px solid grey',
@@ -21,7 +25,7 @@ class Updater(object):
                                     width='100%')
 
         checkbox = widgets.Checkbox(value=self.activated, layout=items_layout, description='Update')
-        slider = widgets.IntSlider(min=1, max=60, step=1, value=self.rate, continuous_update=False, layout=items_layout, description='Delay', **kwargs)
+        slider = widgets.IntSlider(min=1, max=60, step=1, value=self.rate, continuous_update=False, layout=items_layout, description='Delay')
         collection = widgets.HBox([checkbox, slider], layout=box_layout)
         return collection
 
@@ -43,14 +47,12 @@ class Updater(object):
 
     async def update_loop(self):
         while True:
-            print('updating')
             display(self._main())
             await asyncio.sleep(self.collection.children[1].value)
             if self.collection.children[0].value == False:
                 break
 
     async def update(self):
-        print('rendering')
         display(self._main())
         await asyncio.sleep(0) # Free kernel
 
