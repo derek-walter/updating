@@ -14,9 +14,9 @@ class Updater(object):
         self.plot = plot()
         self.activated = not activated
         self.rate = rate
-        self.collection = self._construct(**kwargs)
+        self.collection = self._construct()
         
-    def _construct(self, **kwargs):
+    def _construct(self):
         items_layout = widgets.Layout(width='70%')
 
         box_layout = widgets.Layout(display='flex',
